@@ -1,0 +1,1 @@
+BOOK_STORE_HOME_PAGE = 'https://bookcart.azurewebsites.net/'
