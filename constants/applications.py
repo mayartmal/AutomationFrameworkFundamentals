@@ -1,1 +1,1 @@
-BOOK_STORE_HOME_PAGE = 'https://bookcart.azurewebsites.net/'
+BOOK_STORE_SITE = 'https://bookcart.azurewebsites.net/'
