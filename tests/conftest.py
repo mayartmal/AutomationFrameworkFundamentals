@@ -7,10 +7,12 @@ from page_objects.cart_page import CartPage
 from page_objects.home_page import HomePage
 
 
-@pytest.fixture(scope="session", autouse=True)
+# @pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def init():
     driver = webdriver.Chrome()
     driver.get(BOOK_STORE_SITE)
+    driver.delete_all_cookies()
     BrowserWrapper.driver = driver
     yield
     driver.quit()
@@ -24,3 +26,7 @@ def home_page():
 @pytest.fixture
 def cart_page():
     return CartPage()
+
+@pytest.fixture()
+def browser():
+    return BrowserWrapper()

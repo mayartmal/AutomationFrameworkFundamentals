@@ -1,0 +1,7 @@
+ADDED_BOOK_LOCATOR: str = "//td[contains(@class, 'mat-column-title')]//a"
+DELETE_BUTTON_LOCATOR: str = "//button[@mattooltip='Delete item']"
+EMPTY_CART_LOCATOR: str = "//mat-card-title[.//text()[contains(., 'cart is empty')]]"
+CHECKOUT_BUTTON_LOCATOR: str = "//button[.//text()[contains(., 'CheckOut')]]"
+CLEAR_CART_BUTTON_LOCATOR: str = "//button[.//text()[contains(., 'Clear cart')]]"
+CART_TABLE_LOCATOR: str = "//table"
+SHOPPING_CART_LOCATOR: str = "//app-shoppingcart"
