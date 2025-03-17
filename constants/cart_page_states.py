@@ -1,0 +1,1 @@
+EMPTY_CART_STATE = 'Your shopping cart is empty.'
