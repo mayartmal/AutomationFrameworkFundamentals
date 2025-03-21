@@ -3,13 +3,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.remote.webelement import WebElement
 import time
 
 from constants.configurations import WEB_DRIVER_WAIT_TIMEOUT
 
 
 class BrowserWrapper:
-    driver: webdriver = None
+    driver: webdriver.Chrome = None
 
     def __init__(self):
         self.actions = ActionChains(self.driver)
@@ -29,13 +30,15 @@ class BrowserWrapper:
     def wait_for_element_to_be_presence(self, locator):
         return self.driver_waiter(locator, EC.presence_of_element_located)
 
+    def element_displayed(self, locator):
+        return self.driver.find_element(By.XPATH, locator).is_displayed()
+
+
+
+
     def wait_for_page_to_load(self):
-        driver = self.driver
-
-        def is_page_loaded(driver):
-            return driver.execute_script('return document.readyState') == 'complete'
-
-        WebDriverWait(driver, 60).until(is_page_loaded)
+       while self.driver.execute_script('return document.readyState') != 'complete':
+           self.driver.implicitly_wait(.2)
 
     def wait_for_the_element_blink(self, locator):
         self.wait_for_element_to_be_visible(locator)
@@ -43,6 +46,9 @@ class BrowserWrapper:
 
     def get_element(self, locator, locator_type=By.XPATH):
         return self.driver.find_element(locator_type, locator)
+
+    def get_elements(self, locator):
+        return self.driver.find_elements(By.XPATH, locator)
 
     def click(self, locator=None, element=None):
         assert element or locator
@@ -54,9 +60,12 @@ class BrowserWrapper:
             self.scroll_to_element(element)
             element.click()
 
-    def get_text(self, locator):
-        element = self.wait_for_element_to_be_visible(locator)
-        return element.text
+    def get_text(self, locator: str=None, element: WebElement=None):
+        if locator:
+            return self.wait_for_element_to_be_visible(locator).text
+        elif element:
+            return element.text
+
 
     def clear_browser(self):
         self.driver.delete_all_cookies()
