@@ -13,7 +13,9 @@ from page_objects.home_page import HomePage
 def init():
     options = webdriver.ChromeOptions()
     options.add_argument('--window-size=1920,1080')
+
     driver = webdriver.Chrome(options=options)
+    driver.set_window_position(0, 0)
     driver.get(BOOK_STORE_SITE)
     driver.delete_all_cookies()
     BrowserWrapper.driver = driver

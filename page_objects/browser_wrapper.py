@@ -4,6 +4,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.ui import Select
+from typing import Literal
 import time
 
 from constants.configurations import WEB_DRIVER_WAIT_TIMEOUT
@@ -33,9 +35,6 @@ class BrowserWrapper:
     def element_displayed(self, locator):
         return self.driver.find_element(By.XPATH, locator).is_displayed()
 
-
-
-
     def wait_for_page_to_load(self):
        while self.driver.execute_script('return document.readyState') != 'complete':
            self.driver.implicitly_wait(.2)
@@ -44,7 +43,13 @@ class BrowserWrapper:
         self.wait_for_element_to_be_visible(locator)
         self.wait_for_element_to_be_invisible(locator)
 
-    def get_element(self, locator, locator_type=By.XPATH):
+    def get_element(self, locator, wait_for: Literal["presence", "clickable", "visible"]=None, locator_type=By.XPATH):
+        if wait_for == "presence":
+            self.wait_for_element_to_be_presence(locator)
+        elif wait_for == "clickable":
+            self.wait_for_element_to_be_clickable(locator)
+        elif wait_for == "visible":
+            self.wait_for_element_to_be_visible(locator)
         return self.driver.find_element(locator_type, locator)
 
     def get_elements(self, locator):
@@ -53,12 +58,21 @@ class BrowserWrapper:
     def click(self, locator=None, element=None):
         assert element or locator
         if element:
-            self.scroll_to_element(element)
+            self.move_to_element(element)
             element.click()
         elif locator:
             element = self.wait_for_element_to_be_clickable(locator)
-            self.scroll_to_element(element)
+            self.move_to_element(element)
             element.click()
+
+    def hover_to_element(self, locator=None, element=None):
+        assert element or locator
+        if element:
+            self.move_to_element(element=element)
+        elif locator:
+            self.move_to_element(element=self.get_element(locator=locator, wait_for="visible"))
+
+
 
     def get_text(self, locator: str=None, element: WebElement=None):
         if locator:
@@ -66,6 +80,10 @@ class BrowserWrapper:
         elif element:
             return element.text
 
+    def input_text_for(self, element, variable: str):
+        self.move_to_element(element)
+        self.driver.execute_script("window.scrollBy(0, 100);")
+        element.send_keys(variable)
 
     def clear_browser(self):
         self.driver.delete_all_cookies()
@@ -74,7 +92,14 @@ class BrowserWrapper:
         self.driver.refresh()
         return self
 
-    def scroll_to_element(self, element):
+    def move_to_element(self, element):
         self.actions.move_to_element(element).perform()
+
+    def scroll_to_element(self, element):
+        return self.actions.scroll_to_element(element)
+
+    def select_option(self, element: WebElement, option: str):
+        select = Select(element)
+        select.select_by_value(option)
 
 

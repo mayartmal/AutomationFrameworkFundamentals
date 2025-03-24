@@ -46,3 +46,25 @@ def test_adding_a_few_random_books_and_checking_the_titles(add_books_to_cart, ca
         assert item in expected_result
 
 
+def test_switch_sorting(home_page):
+    print("start sorting test")
+    home_page.clear_browser()
+    home_page.click_close_cookie_button()
+    home_page.alphabetize_books()
+    print("end sorting test")
+
+@pytest.mark.parametrize("run", range(100))
+def test_filter_by_price(home_page, run):
+    print("start filter test")
+    home_page.clear_browser()
+    home_page.click_close_cookie_button()
+    home_page.filter_books_by_price(min_price=0, max_price=5)
+    print("end filter test")
+
+def test_switch_categories(home_page):
+    home_page.clear_browser()
+    home_page.switch_books_category_to("Fiction")
+    time.sleep(10)
+
+
+

@@ -1,6 +1,7 @@
+import time
 from typing import Union, Literal
 import builtins
-from selenium.common import TimeoutException
+from selenium.common import NoSuchElementException
 from selenium import webdriver
 
 from page_objects.browser_wrapper import BrowserWrapper
@@ -9,7 +10,15 @@ from constants.home_page_locators import (
     CART_BUTTON_LOCATOR,
     COOKIE_DIALOG_CLOSE_BUTTON,
     # BOOK_ADDED_POPUP_LOCATOR
-    BOOK_ADDED_POPUP_BUTTON_LOCATOR
+    BOOK_ADDED_POPUP_BUTTON_LOCATOR,
+    SORT_BY__DROP_DOWN,
+    ALPHABETICAL__OPTION,
+    FILTER_BY_PRICE__DIV,
+    MIN_PRICE__INPUT,
+    MAX_PRICE__INPUT,
+    APPLY__BUTTON,
+    BOOK_CATEGORIES__BUTTON,
+    CATEGORY__A
 )
 from constants.all_books_data import BOOKS, BOOKOUTLET_BOOKS
 from utils.data_generator import generate_random_number, choose_items
@@ -21,13 +30,11 @@ class HomePage(BrowserWrapper):
         super().__init__()
 
     def click_close_cookie_button(self):
-        self.click(locator=COOKIE_DIALOG_CLOSE_BUTTON) if self.element_displayed(locator=COOKIE_DIALOG_CLOSE_BUTTON) else None
-
-        # try:
-        #     self.wait_for_element_to_be_visible(locator=COOKIE_DIALOG_CLOSE_BUTTON)
-        #     self.click(locator=COOKIE_DIALOG_CLOSE_BUTTON)
-        # except TimeoutException:
-        #     print("Cookie button did not show up")
+        try:
+            self.click(locator=COOKIE_DIALOG_CLOSE_BUTTON)if self.element_displayed(locator=COOKIE_DIALOG_CLOSE_BUTTON
+                                                                                     ) else None
+        except NoSuchElementException:
+            pass
 
     def click_add_book_button(self, book_title: str):
         self.click(locator=ADD_BUTTON_LOCATOR.format(book_title))
@@ -85,5 +92,24 @@ class HomePage(BrowserWrapper):
     def generate_book_titles_list(self, number_of_books):
         chosen_books_ids = choose_items(list(BOOKOUTLET_BOOKS.keys()), number_of_books)
         return [BOOKOUTLET_BOOKS[chosen_book_id]["title"] for chosen_book_id in chosen_books_ids]
+
+    def alphabetize_books(self):
+        select_element = self.get_element(locator=SORT_BY__DROP_DOWN, wait_for="clickable")
+        self.select_option(element=select_element, option=ALPHABETICAL__OPTION)
+        import time
+        time.sleep(10)
+
+    def filter_books_by_price(self, min_price: int, max_price: int):
+        self.click(FILTER_BY_PRICE__DIV)
+        for price, locator in zip([min_price, max_price], [MIN_PRICE__INPUT, MAX_PRICE__INPUT]):
+            self.input_text_for(self.get_element(locator, wait_for="clickable"), str(price))
+        self.click(APPLY__BUTTON)
+
+    def switch_books_category_to(self, category):
+        element = self.get_element(locator=BOOK_CATEGORIES__BUTTON, wait_for="clickable")
+        self.hover_to_element(element=element)
+        self.click(locator=CATEGORY__A.format(category=category))
+
+
 
 
