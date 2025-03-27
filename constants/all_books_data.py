@@ -315,35 +315,26 @@ BOOKS = {
         "coverFileName": "Default_image.jpg"
     }
 }
-BOOKOUTLET_BOOKS = {
+BOOK_OUTLET_BOOKS = {
     1: {
-        "title": "Heir of Fire (Throne of Glass, Bk. 3)"
-        },
-    2: {
         "title": "Crown of Midnight (Throne of Glass, Bk. 2)"
     },
-    3: {
+    2: {
         "title": "Legendborn (The Legendborn Cycle, Bk. 1)"
     },
-    4: {
+    3: {
         "title": "Bloodmarked (The Legendborn Cycle, Bk. 2)"
         },
-    5: {
+    4: {
         "title": "Wisteria (Belladonna, Bk. 3)"
         },
-    6: {
+    5: {
         "title": "Silver in the Bone (Bk. 1)"
         },
-    7: {
-        "title": "The Cruel Prince (The Folk of the Air, Bk. 1)"
-        },
-    8: {
+    6: {
         "title": "Belladonna"
         },
-    9: {
+    7: {
         "title": "The Shadows Between Us"
-        },
-    10: {
-        "title": "Foxglove (Belladonna, Bk. 2)"
         }
 }
