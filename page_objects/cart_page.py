@@ -1,9 +1,9 @@
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from constants.locators.cart_page import CartPageLocators
-from page_objects.abstract_page import AbstractPage
+from page_objects.common_page import CommonPage
 
 
-class CartPage(AbstractPage):
+class CartPage(CommonPage):
 
     def __init__(self):
         super().__init__()

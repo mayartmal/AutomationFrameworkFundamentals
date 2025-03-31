@@ -32,5 +32,6 @@ class TestSuites:
     CATEGORY = "Biography and Memoir"
     LANGUAGE = "Spanish"
 
-
-
+class TabParameter:
+    current_tab = "current tab"
+    new_tab = "new tab"

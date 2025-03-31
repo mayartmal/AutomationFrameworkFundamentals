@@ -4,12 +4,12 @@ from typing import Union, Literal
 
 from constants.all_books_data import BOOK_OUTLET_BOOKS
 from constants.locators.home_page import HomePageLocators, HomePageOptions, HomePageAttributes
-from page_objects.abstract_page import AbstractPage
+from page_objects.common_page import CommonPage
 # from tests.conftest import cart_page
 from utils.data_generator import generate_random_number, choose_items
 
 
-class HomePage(AbstractPage):
+class HomePage(CommonPage):
 
     def __init__(self):
         super().__init__()
@@ -188,9 +188,3 @@ class HomePage(AbstractPage):
     def get_books_links(self) -> list[str]:
         link_elements =  self.wait_for_elements_to_be_visible(HomePageLocators.GENERAL_BOOK_CARD__A)
         return [link_element.get_attribute("href") for link_element in link_elements]
-
-
-
-    # to discuss
-    # def get_opened_home_page_tab_name(self) -> str:
-    #     return self.driver.title
