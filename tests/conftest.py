@@ -3,7 +3,7 @@ from selenium import webdriver
 
 from constants.applications import BOOK_STORE_SITE
 from page_objects.browser_wrapper import BrowserWrapper
-from page_objects.abstract_page import AbstractPage
+from page_objects.common_page import CommonPage
 from page_objects.cart_page import CartPage
 from page_objects.home_page import HomePage
 from page_objects.item_page import ItemPage
@@ -24,7 +24,7 @@ def init():
 
 @pytest.fixture
 def abstract_page():
-    return AbstractPage()
+    return CommonPage()
 
 
 @pytest.fixture

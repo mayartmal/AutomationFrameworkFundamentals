@@ -17,6 +17,7 @@ class BookNames:
     # BookNames.HEIR_OF_FIRE, BookNames.LEGENDBORN, BookNames.CROWN
     # endregion
 
+
 class ElementsStates:
     EMPTY_CART_STATE = 'Your Shopping Cart is Empty!'
 
@@ -31,4 +32,6 @@ class TestSuites:
     CATEGORY = "Biography and Memoir"
     LANGUAGE = "Spanish"
 
-
+class TabParameter:
+    current_tab = "current tab"
+    new_tab = "new tab"

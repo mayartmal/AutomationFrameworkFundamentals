@@ -5,13 +5,12 @@ from selenium import webdriver
 
 from constants.all_books_data import BOOK_OUTLET_BOOKS
 from constants.applications import BOOK_STORE_SITE
-from constants.cart_page_states import EMPTY_CART_STATE
-from constants.test import BookNames, TestSuites, ElementsStates
+from constants.test import BookNames, TestSuites, ElementsStates, TabParameter
 from tests.conftest import home_page
 
 
 @pytest.mark.parametrize("add_books_to_cart", [TestSuites.DEFAULT_BOOK], indirect=True)
-@pytest.mark.parametrize("switch_to_cart", ["current tab"], indirect=True)
+@pytest.mark.parametrize("switch_to_cart", [TabParameter.current_tab], indirect=True)
 def test_book_can_be_added_to_the_cart(add_books_to_cart, switch_to_cart, cart_page):
     """
     1) adds a specific book to the cart
@@ -24,7 +23,7 @@ def test_book_can_be_added_to_the_cart(add_books_to_cart, switch_to_cart, cart_p
 
 
 @pytest.mark.parametrize("add_books_to_cart", [TestSuites.DEFAULT_BOOK], indirect=True)
-@pytest.mark.parametrize("switch_to_cart", ["new tab"], indirect=True)
+@pytest.mark.parametrize("switch_to_cart", [TabParameter.new_tab], indirect=True)
 def test_book_can_be_added_to_the_cart_with_a_new_tab(add_books_to_cart, switch_to_cart, cart_page):
     """
     1) adds a specific book to the cart
@@ -37,7 +36,7 @@ def test_book_can_be_added_to_the_cart_with_a_new_tab(add_books_to_cart, switch_
 
 
 @pytest.mark.parametrize("add_books_to_cart", [TestSuites.DEFAULT_BOOK], indirect=True)
-@pytest.mark.parametrize("switch_to_cart", ["current tab"], indirect=True)
+@pytest.mark.parametrize("switch_to_cart", [TabParameter.current_tab], indirect=True)
 def test_book_can_be_deleted_from_the_cart(add_books_to_cart, switch_to_cart, cart_page):
     """
     1) adds a specific book to the cart
@@ -56,7 +55,8 @@ def test_book_can_be_deleted_from_the_cart(add_books_to_cart, switch_to_cart, ca
 
 
 @pytest.mark.parametrize("add_books_to_cart", [TestSuites.NUMBER_OF_BOOKS], indirect=True)
-def test_adding_a_few_random_books_and_checking_the_quantity(add_books_to_cart, cart_page):
+@pytest.mark.parametrize("switch_to_cart", [TabParameter.current_tab], indirect=True)
+def test_adding_a_few_random_books_and_checking_the_quantity(add_books_to_cart, switch_to_cart, cart_page):
     """
     1) adds a few random books from the test list (test.py)
     2) checks the number of books added
@@ -68,7 +68,7 @@ def test_adding_a_few_random_books_and_checking_the_quantity(add_books_to_cart, 
 
 @pytest.mark.parametrize("add_books_to_cart", [TestSuites.DEFAULT_BOOKS_LIST],
                          indirect=True)
-@pytest.mark.parametrize("switch_to_cart", ["current tab"], indirect=True)
+@pytest.mark.parametrize("switch_to_cart", [TabParameter.current_tab], indirect=True)
 def test_adding_a_few_books_and_checking_the_titles(add_books_to_cart, switch_to_cart, cart_page):
     """
     1) adds a few specific books
@@ -99,8 +99,7 @@ def test_filter_by_price(prepare_home_page, home_page):
     """
     home_page.filter_books_by_price(min_price=TestSuites.MIN_PRICE, max_price=TestSuites.MAX_PRICE)
     prices = home_page.get_all_prices_on_the_page()
-    assert all(price >= TestSuites.MIN_PRICE for price in prices)
-    assert all(price <= TestSuites.MAX_PRICE for price in prices)
+    assert all( price >= TestSuites.MIN_PRICE and price <= TestSuites.MAX_PRICE for price in prices)
 
 
 def test_switch_categories(prepare_home_page, home_page):
@@ -115,19 +114,19 @@ def test_switch_categories(prepare_home_page, home_page):
 
 def test_language_filter(prepare_home_page, abstract_page, home_page, item_page):
     """
-    1) switches to desired language
+    1) switch to desired language
     2) scan all displayd books for language propertie
-    3) checks result
+    3) check result
     """
     home_page.switch_language_filter_to(TestSuites.LANGUAGE)
     books_links = home_page.get_books_links()
     expected_result = TestSuites.LANGUAGE
     actual_results = []
     for book_link in books_links:
-        current_tab = abstract_page.get_current_browser_tab()
-        abstract_page.open_new_tab_and_switch_to_it(path=book_link)
+        current_tab = home_page.get_current_browser_tab()
+        home_page.open_new_tab_and_switch_to_it(path=book_link)
         actual_results.append(item_page.get_item_language())
-        abstract_page.close_tab()
+        home_page.close_tab()
     assert all(actual_result == expected_result for actual_result in actual_results)
 
 
