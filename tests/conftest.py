@@ -3,8 +3,10 @@ from selenium import webdriver
 
 from constants.applications import BOOK_STORE_SITE
 from page_objects.browser_wrapper import BrowserWrapper
+from page_objects.abstract_page import AbstractPage
 from page_objects.cart_page import CartPage
 from page_objects.home_page import HomePage
+from page_objects.item_page import ItemPage
 
 
 # @pytest.fixture(scope="session", autouse=True)
@@ -20,6 +22,10 @@ def init():
     yield
     driver.quit()
 
+@pytest.fixture
+def abstract_page():
+    return AbstractPage()
+
 
 @pytest.fixture
 def home_page():
@@ -30,20 +36,31 @@ def home_page():
 def cart_page():
     return CartPage()
 
+@pytest.fixture
+def item_page():
+    return ItemPage()
+
 
 @pytest.fixture
-def add_books_to_cart(request, home_page, cart_page):
+def prepare_home_page(home_page):
     home_page.clear_browser()
     home_page.close_cookie_dialog()
-    print(request.param[0])
-    print(request.param[1])
-    home_page.add_books_to_cart(book_adder=request.param[0])
-    home_page.go_to_cart(in_the_new_tab=request.param[1])
-    import time
-    time.sleep(5)
-    return request.param[0]
 
 
+@pytest.fixture
+def add_books_to_cart(request, prepare_home_page, home_page, cart_page):
+    home_page.add_books_to_cart(book_adder=request.param)
+    return request.param
+
+
+@pytest.fixture
+def switch_to_cart(request, home_page):
+    if request.param == "new tab":
+        home_page.go_to_cart_in_a_new_tab()
+    elif request.param == "current tab":
+        home_page.go_to_cart()
+    else:
+        home_page.go_to_cart()
 
 
 # region obsolete fixtures

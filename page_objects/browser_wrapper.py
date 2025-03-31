@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
-from typing import Literal, Optional, List
+from typing import Literal, Optional, List, Union
 import time
 
 from constants.configurations import WEB_DRIVER_WAIT_TIMEOUT
@@ -19,7 +19,7 @@ class BrowserWrapper:
         self.actions = ActionChains(self.driver)
 
     # region element waits OK
-    def driver_waiter(self, locator: str, condition: EC, locator_type: By = By.XPATH) -> WebElement:
+    def driver_waiter(self, locator: str, condition: EC, locator_type: By = By.XPATH) -> Union[WebElement, list[WebElement]]:
         """
         Waits for an element using a specified locator and condition.
 
@@ -65,6 +65,9 @@ class BrowserWrapper:
         :return: WebElement - the web element that is found in the DOM.
         """
         return self.driver_waiter(locator, EC.presence_of_element_located)
+
+    def wait_for_elements_to_be_visible(self, locator) -> list[WebElement]:
+        return self.driver_waiter(locator, EC.visibility_of_all_elements_located)
 
     def wait_for_the_element_blink(self, locator: str) -> None:
         """
@@ -161,7 +164,7 @@ class BrowserWrapper:
             self.move_to_element(element)
             self.actions.key_down(Keys.CONTROL).click(element).key_up(Keys.CONTROL).perform()
 
-    def hover_to_element(self, locator: str = None, element: WebElement = None) -> None:
+    def hover(self, locator: str = None, element: WebElement = None) -> None:
         """
         Moves the mouse pointer over a specified web element.
 
@@ -221,6 +224,9 @@ class BrowserWrapper:
     def close_tab(self):
         self.driver.close()
         self.switch_to_tab(self.get_all_browsers_tabs()[0])
+
+    def get_opened_cart_page_tab_name(self) -> str:
+        return self.driver.title
 
     # endregion
 
