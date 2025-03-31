@@ -1,6 +1,5 @@
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
-from constants.cart_page import CartPageLocators
-from page_objects.browser_wrapper import BrowserWrapper
+from constants.locators.cart_page import CartPageLocators
 from page_objects.abstract_page import AbstractPage
 
 

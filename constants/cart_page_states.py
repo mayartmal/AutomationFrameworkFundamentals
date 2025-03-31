@@ -1,1 +1,0 @@
-EMPTY_CART_STATE = 'Your Shopping Cart is Empty!'

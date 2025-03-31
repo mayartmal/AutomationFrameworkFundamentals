@@ -5,7 +5,6 @@ from selenium import webdriver
 
 from constants.all_books_data import BOOK_OUTLET_BOOKS
 from constants.applications import BOOK_STORE_SITE
-from constants.cart_page_states import EMPTY_CART_STATE
 from constants.test import BookNames, TestSuites, ElementsStates
 from tests.conftest import home_page
 
@@ -56,7 +55,8 @@ def test_book_can_be_deleted_from_the_cart(add_books_to_cart, switch_to_cart, ca
 
 
 @pytest.mark.parametrize("add_books_to_cart", [TestSuites.NUMBER_OF_BOOKS], indirect=True)
-def test_adding_a_few_random_books_and_checking_the_quantity(add_books_to_cart, cart_page):
+@pytest.mark.parametrize("switch_to_cart", ["current tab"], indirect=True)
+def test_adding_a_few_random_books_and_checking_the_quantity(add_books_to_cart, switch_to_cart, cart_page):
     """
     1) adds a few random books from the test list (test.py)
     2) checks the number of books added

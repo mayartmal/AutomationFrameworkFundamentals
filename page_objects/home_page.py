@@ -1,10 +1,9 @@
 import builtins
 from selenium.common import NoSuchElementException
-from typing import Union, Literal, Optional
+from typing import Union, Literal
 
 from constants.all_books_data import BOOK_OUTLET_BOOKS
-from constants.home_page import HomePageLocators, HomePageOptions, HomePageAttributes
-from page_objects.browser_wrapper import BrowserWrapper
+from constants.locators.home_page import HomePageLocators, HomePageOptions, HomePageAttributes
 from page_objects.abstract_page import AbstractPage
 # from tests.conftest import cart_page
 from utils.data_generator import generate_random_number, choose_items

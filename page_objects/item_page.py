@@ -1,5 +1,5 @@
 from page_objects.browser_wrapper import BrowserWrapper
-from constants.item_page import ItemPageLocators
+from constants.locators.item_page import ItemPageLocators
 
 class ItemPage(BrowserWrapper):
 

@@ -12,12 +12,9 @@ BOOK_OUTLET_BOOKS = {
         "title": "Wisteria (Belladonna, Bk. 3)"
         },
     5: {
-        "title": "Silver in the Bone (Bk. 1)"
-        },
-    6: {
         "title": "Belladonna"
         },
-    7: {
+    6: {
         "title": "The Shadows Between Us"
         }
 }
