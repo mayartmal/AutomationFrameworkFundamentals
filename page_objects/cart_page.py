@@ -1,9 +1,10 @@
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from constants.cart_page import CartPageLocators
 from page_objects.browser_wrapper import BrowserWrapper
+from page_objects.abstract_page import AbstractPage
 
 
-class CartPage(BrowserWrapper):
+class CartPage(AbstractPage):
 
     def __init__(self):
         super().__init__()
@@ -23,7 +24,7 @@ class CartPage(BrowserWrapper):
 
         :return: int - quantity of all books in the cart
         """
-        elements = self.get_elements(locator=CartPageLocators.BOOKS_QUANTITY__INPUT)
+        elements = self.wait_for_elements_to_be_visible(locator=CartPageLocators.BOOKS_QUANTITY__INPUT)
         return sum([int(element.get_property("value")) for element in elements])
 
     def get_titles_of_books_in_the_cart(self) -> list[str]:
@@ -32,7 +33,10 @@ class CartPage(BrowserWrapper):
 
         :return: list[str] - list of all books in the cart
         """
-        elements = self.get_elements(locator=CartPageLocators.ADDED_BOOK_NAME__TEXT_ELEMENT)
+        # import time
+        # time.sleep(100)
+        # print()
+        elements = self.wait_for_elements_to_be_visible(locator=CartPageLocators.ADDED_BOOK_NAME__TEXT_ELEMENT)
         return [self.get_text(element=element) for element in elements]
 
     def click_delete_button(self) -> None:
@@ -58,10 +62,3 @@ class CartPage(BrowserWrapper):
         :return: str - empty cart status string
         """
         return self.get_text(locator=CartPageLocators.EMPTY_CART__P)
-
-    def get_opened_cart_page_tab_name(self) -> str:
-        return self.driver.title
-
-    def close_cart_page_tab(self) -> None:
-
-        self.close_tab()
